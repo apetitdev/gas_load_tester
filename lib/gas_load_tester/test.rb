@@ -1,5 +1,7 @@
 require 'ruby-progressbar'
 require 'thwait'
+require 'active_support'
+require 'active_support/core_ext'
 
 module GasLoadTester
   class Test

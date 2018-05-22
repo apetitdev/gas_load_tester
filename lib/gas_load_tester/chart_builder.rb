@@ -223,8 +223,7 @@ module GasLoadTester
         else
           val = values.collect(&:time).inject(0){|sum,x| sum + x }.fdiv(values.size)*1000
         end
-        val = 0 if val.to_f.nan?
-        val = 0 if val.infinite?
+        val = 0 if val.to_f.nan? || val.infinite?
         average_time_data[Time.at(key).utc.strftime("%H:%M:%S")] = val
       }
 
