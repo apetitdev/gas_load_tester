@@ -160,16 +160,10 @@ module GasLoadTester
       summary_body = build_summary(test)
       error_body = build_error_table(test)
 
-      chart_body + summary_body + error_body
+      chart_body.html_safe + summary_body.html_safe + error_body.html_safe
     end
 
     def build_summary(test)
-      min_time = test.summary_min_time
-      max_time = test.summary_max_time
-      avg_time = test.summary_avg_time
-      success = test.summary_success
-      error = test.summary_error
-
       "<div style=\"width: 100%; text-align: center; margin-top: 20px; margin-bottom: 20px;\">
          <span style=\"align: center; font-weight: bold;\">Summary</span>
        </div>
@@ -181,11 +175,11 @@ module GasLoadTester
              <tbody>
                <tr>
                  <th style=\"font-weight: bold;\">Average</th>
-                 <td>#{avg_time.round(4)} ms</td>
+                 <td>#{test.summary_avg_time.round(4)} ms</td>
                </tr>
                <tr>
                  <th style=\"font-weight: bold;\">Min/Max</th>
-                 <td>#{min_time.round(4)} / #{max_time.round(4)} ms</td>
+                 <td>#{test.summary_min_time.round(4)} / #{test.summary_max_time.round(4)} ms</td>
                </tr>
              </tbody>
            </table>
@@ -195,11 +189,11 @@ module GasLoadTester
              <tbody>
                <tr>
                  <th style=\"font-weight: bold;\">Success</th>
-                 <td>#{success}</td>
+                 <td>#{test.summary_success}</td>
                </tr>
                <tr>
                  <th style=\"font-weight: bold;\">Error</th>
-                 <td>#{error}</td>
+                 <td>#{test.summary_error}</td>
                </tr>
              </tbody>
            </table>
@@ -223,8 +217,7 @@ module GasLoadTester
         else
           val = values.collect(&:time).inject(0){|sum,x| sum + x }.fdiv(values.size)*1000
         end
-        val = 0 if val.to_f.nan?
-        val = 0 if val.infinite?
+        val = 0 if val.to_f.nan? || val.infinite?
         average_time_data[Time.at(key).utc.strftime("%H:%M:%S")] = val
       }
 
