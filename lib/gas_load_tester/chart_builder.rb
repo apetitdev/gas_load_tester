@@ -160,7 +160,7 @@ module GasLoadTester
       summary_body = build_summary(test)
       error_body = build_error_table(test)
 
-      chart_body + summary_body + error_body
+      chart_body.html_safe + summary_body.html_safe + error_body.html_safe
     end
 
     def build_summary(test)
